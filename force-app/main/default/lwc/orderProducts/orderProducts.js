@@ -4,6 +4,9 @@
 
 import {LightningElement, api, wire} from 'lwc';
 
+import getOrderDetails from '@salesforce/apex/OrderViewController.getOrderDetails';
+import {consoleLogDeepCopy} from "c/lwcHelper";
+
 export default class AvailableProducts extends LightningElement {
 
     /**
@@ -11,4 +14,68 @@ export default class AvailableProducts extends LightningElement {
      */
     @api recordId;
 
+    /**
+     * Stores the quote record and its items
+     * @private
+     */
+    _quoteRecord;
+
+    /**
+     * Whether the component is loading or not.
+     * @type {boolean}
+     */
+    isLoading = false;
+
+    /**
+     * Gets the available product column names
+     * @returns {[{}]}
+     */
+    get orderedItemsColumns(){
+        const columns = [
+            { label: 'Name', fieldName: 'Name' },
+            { label: 'Unit Price', fieldName: 'UnitPrice', type: 'currency' },
+            { label: 'Quantity', fieldName: 'Quantity', type: 'number' },
+            { label: 'Total Price', fieldName: 'TotalPrice', type: 'currency' }
+        ]
+        return columns;
+    }
+
+
+    /**
+     * lifecycle hook
+     */
+    connectedCallback() {
+        this.retrieveOrderDetails();
+    }
+
+
+    /**
+     * Returns the quote items attached to the quote.
+     * @returns {*|*[]}
+     */
+    get quoteItems(){
+        return this._quoteRecord ? this._quoteRecord['OrderItems'] : [];
+    }
+
+
+
+    /**
+     * Retrieves the available products.
+     * @param error
+     * @param data
+     */
+    retrieveOrderDetails() {
+        this.isLoading = true;
+        getOrderDetails({orderId : this.recordId})
+            .then((result)=>{
+                this._quoteRecord = result;
+                consoleLogDeepCopy(this.quoteItems);
+            })
+            .catch((error)=>{
+                console.log(error);
+            })
+            .finally(()=>{
+                this.isLoading = false;
+            })
+    }
 }

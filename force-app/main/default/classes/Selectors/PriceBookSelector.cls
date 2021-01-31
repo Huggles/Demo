@@ -10,6 +10,6 @@ public with sharing class PriceBookSelector {
      */
     public static Id getPriceBookIdForOrder(Id orderId){
         Order order = [SELECT Id, Pricebook2Id FROM Order WHERE Id = :orderId LIMIT 1];
-        return order.Id;
+        return order.Pricebook2Id;
     }
 }

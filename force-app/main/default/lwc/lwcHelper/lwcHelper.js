@@ -6,7 +6,7 @@ const consoleLogAsJSON = (value)=>{
     console.log(JSON.stringify(value));
 }
 const consoleLogDeepCopy = (obj)=>{
-    console.log(JSON.stringify(obj));
+    console.log(deepCloneObject(obj));
 }
 const deepCloneObject = (obj)=>{
     console.log(JSON.parse(JSON.stringify(obj)));
