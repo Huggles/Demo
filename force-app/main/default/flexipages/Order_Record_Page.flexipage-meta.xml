@@ -32,25 +32,16 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
-                <componentName>availableProducts</componentName>
+                <componentName>orderView</componentName>
             </componentInstance>
         </itemInstances>
         <name>main</name>
         <type>Region</type>
     </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentName>orderProducts</componentName>
-            </componentInstance>
-        </itemInstances>
-        <name>sidebar</name>
-        <type>Region</type>
-    </flexiPageRegions>
     <masterLabel>Order Record Page</masterLabel>
     <sobjectType>Order</sobjectType>
     <template>
-        <name>flexipage:recordHomeTemplateDesktop</name>
+        <name>flexipage:recordHomeSingleColTemplateDesktop</name>
     </template>
     <type>RecordPage</type>
 </FlexiPage>

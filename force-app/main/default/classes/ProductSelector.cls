@@ -1,7 +1,7 @@
 /**
  * @author Hugo van Krimpen
  * @date 31-01-2021
- * @description Controller Class for product functions.
+ * @description Selector Class for Product2
  */
 public with sharing class ProductSelector {
 
@@ -9,11 +9,12 @@ public with sharing class ProductSelector {
     /**
      * @return Gets a list of available products
      */
-    public static List<PricebookEntry> getAvailableProducts(){
+    public static List<PricebookEntry> getAvailableProducts(Id orderId){
+        Id pricebookId = PriceBookSelector.getPriceBookIdForOrder(orderId);
         List<PricebookEntry> pricebookEntries = [
-                SELECT Id, UnitPrice, Product2.Id, Product2.Name
+                SELECT Id, Name, UnitPrice, Product2Id
                 FROM PricebookEntry
-                WHERE IsActive = TRUE AND Pricebook2.IsStandard = TRUE];
+                WHERE IsActive = TRUE AND Pricebook2Id = :pricebookId];
         return pricebookEntries;
     }
 }

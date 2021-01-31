@@ -8,9 +8,9 @@ public with sharing class OrderViewController {
 
 
     @AuraEnabled(Cacheable=true)
-    public static List<PricebookEntry> getAvailableProducts(){
+    public static List<PricebookEntry> getAvailableProducts(Id orderId){
         try {
-            return ProductSelector.getAvailableProducts();
+            return ProductSelector.getAvailableProducts(orderId);
         }
         catch(Exception e){
             //Log error;
