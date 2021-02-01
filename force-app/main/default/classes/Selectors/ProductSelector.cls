@@ -11,10 +11,12 @@ public with sharing class ProductSelector {
      */
     public static List<PricebookEntry> getAvailableProducts(Id orderId){
         Id pricebookId = PriceBookSelector.getPriceBookIdForOrder(orderId);
+        System.debug(pricebookId);
         List<PricebookEntry> pricebookEntries = [
                 SELECT Id, Name, UnitPrice, Product2Id
                 FROM PricebookEntry
                 WHERE IsActive = TRUE AND Pricebook2Id = :pricebookId];
+        System.debug(pricebookEntries);
         return pricebookEntries;
     }
 }

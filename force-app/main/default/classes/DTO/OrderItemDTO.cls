@@ -20,6 +20,16 @@ public with sharing class OrderItemDTO {
     public Decimal Quantity {get; set;}
 
 
+    /**
+     * Test Visible Constructor
+     */
+    @TestVisible
+    private OrderItemDTO(){}
+
+    /**
+     * Constructor
+     * @param orderItem The Order Item
+     */
     public OrderItemDTO(OrderItem orderItem){
         this.Id = orderItem.Id;
         this.Name = orderItem.Product2.Name;
@@ -28,4 +38,11 @@ public with sharing class OrderItemDTO {
         this.Quantity = orderItem.Quantity;
     }
 
+    public OrderItem getOrderItem(){
+        OrderItem orderItem = new OrderItem();
+        orderItem.Id = this.Id;
+        orderItem.UnitPrice = this.UnitPrice;
+        orderItem.Quantity = this.Quantity;
+        return orderItem;
+    }
 }

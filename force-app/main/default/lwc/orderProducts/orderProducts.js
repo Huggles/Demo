@@ -5,6 +5,9 @@
 import {LightningElement, api, wire} from 'lwc';
 
 import getOrderDetails from '@salesforce/apex/OrderViewController.getOrderDetails';
+import insertOrderItem from '@salesforce/apex/OrderViewController.insertOrderItem';
+import updateOrderItem from '@salesforce/apex/OrderViewController.updateOrderItem';
+
 import {consoleLogDeepCopy} from "c/lwcHelper";
 
 export default class AvailableProducts extends LightningElement {
@@ -61,8 +64,6 @@ export default class AvailableProducts extends LightningElement {
 
     /**
      * Retrieves the available products.
-     * @param error
-     * @param data
      */
     retrieveOrderDetails() {
         this.isLoading = true;
@@ -73,6 +74,24 @@ export default class AvailableProducts extends LightningElement {
             })
             .catch((error)=>{
                 console.log(error);
+            })
+            .finally(()=>{
+                this.isLoading = false;
+            })
+    }
+    /**
+     * Adds the provided price book entry as an Order Item to the Order this lwc represents.
+     * @param productId
+     */
+    @api
+    async addProduct(pricebookEntry) {
+        this.isLoading = true;
+        await insertOrderItem({orderId : this.recordId})
+            .then((result)=>{
+                this.retrieveOrderDetails();
+            })
+            .catch((error)=>{
+
             })
             .finally(()=>{
                 this.isLoading = false;

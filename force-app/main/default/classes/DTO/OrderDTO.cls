@@ -14,6 +14,13 @@ public with sharing class OrderDTO {
     public List<OrderItemDTO> OrderItems {get; set;}
 
 
+    /**
+     * Test Visible Constructor
+     */
+    @TestVisible
+    private OrderDTO(){}
+
+
     public OrderDTO(Order order){
         this.Id = order.Id;
         this.Name = order.Name;

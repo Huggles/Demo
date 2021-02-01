@@ -48,4 +48,42 @@ public with sharing class OrderViewController {
         }
     }
 
+    /**
+     * Add a product Id to an Order.
+     * @param orderId The Order id.
+     * @param priceBookEntryId The PriceBookEntry id.
+     *
+     * @return Order record.
+     */
+    @AuraEnabled
+    public static OrderItemDTO insertOrderItem(Id orderId, Id priceBookEntryId){
+        try {
+            OrderItemDTO orderItemDTO = OrderService.addNewOrderItem(orderId,priceBookEntryId);
+            return orderItemDTO;
+        }
+        catch(Exception e){
+            //Log error;
+            throw e;
+        }
+    }
+
+    /**
+     * Add a product Id to an Order.
+     * @param orderItemDTO The order item to update.
+     *
+     * @return Order record.
+     */
+    @AuraEnabled
+    public static OrderItemDTO updateOrderItem(OrderItemDTO orderItemDTO){
+        try {
+            OrderItem orderItem = orderItemDTO.getOrderItem();
+            update orderItem;
+            return new OrderItemDTO(orderItem);
+        }
+        catch(Exception e){
+            //Log error;
+            throw e;
+        }
+    }
+
 }
