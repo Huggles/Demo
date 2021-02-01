@@ -38,10 +38,6 @@ public with sharing class OrderViewController {
             OrderDTO orderDTO = new OrderDTO(orders[0]);
             return orderDTO;
         }
-        catch (ListException listException){
-            //Catch for when a wrong id is passed.
-            throw new CustomException('Order not found.');
-        }
         catch(Exception e){
             //Log error;
             throw e;
@@ -49,17 +45,17 @@ public with sharing class OrderViewController {
     }
 
     /**
-     * Add a product Id to an Order.
+     * Adds Pricebook Entries as Order Items to an Order.
      * @param orderId The Order id.
-     * @param priceBookEntryId The PriceBookEntry id.
+     * @param priceBookEntryIds The PriceBookEntry ids.
      *
      * @return Order record.
      */
     @AuraEnabled
-    public static OrderItemDTO insertOrderItem(Id orderId, Id priceBookEntryId){
+    public static OrderDTO addPriceBookEntries(Id orderId, List<Id> priceBookEntryIds){
         try {
-            OrderItemDTO orderItemDTO = OrderService.addNewOrderItem(orderId,priceBookEntryId);
-            return orderItemDTO;
+            OrderService.addPriceBookEntries(orderId,priceBookEntryIds);
+            return getOrderDetails(orderId);
         }
         catch(Exception e){
             //Log error;
@@ -68,17 +64,17 @@ public with sharing class OrderViewController {
     }
 
     /**
-     * Add a product Id to an Order.
-     * @param orderItemDTO The order item to update.
+     * Adds Pricebook Entries as Order Items to an Order.
+     * @param orderId The Order id.
+     * @param priceBookEntryIds The PriceBookEntry ids.
      *
      * @return Order record.
      */
     @AuraEnabled
-    public static OrderItemDTO updateOrderItem(OrderItemDTO orderItemDTO){
+    public static void confirmOrder(Id orderId){
         try {
-            OrderItem orderItem = orderItemDTO.getOrderItem();
-            update orderItem;
-            return new OrderItemDTO(orderItem);
+            Boolean success = OrderService.confirmOrder(orderId);
+            System.debug(success);
         }
         catch(Exception e){
             //Log error;

@@ -19,12 +19,8 @@ public with sharing class OrderItemDTO {
     @AuraEnabled
     public Decimal Quantity {get; set;}
 
-
-    /**
-     * Test Visible Constructor
-     */
-    @TestVisible
-    private OrderItemDTO(){}
+    @AuraEnabled
+    public Id PriceBookEntryId {get; set;}
 
     /**
      * Constructor
@@ -36,13 +32,6 @@ public with sharing class OrderItemDTO {
         this.UnitPrice = orderItem.UnitPrice;
         this.TotalPrice = orderItem.TotalPrice;
         this.Quantity = orderItem.Quantity;
-    }
-
-    public OrderItem getOrderItem(){
-        OrderItem orderItem = new OrderItem();
-        orderItem.Id = this.Id;
-        orderItem.UnitPrice = this.UnitPrice;
-        orderItem.Quantity = this.Quantity;
-        return orderItem;
+        this.PriceBookEntryId = orderItem.PricebookEntryId;
     }
 }

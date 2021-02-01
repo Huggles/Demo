@@ -12,4 +12,11 @@ export default class OrderView extends LightningElement {
     @api recordId;
 
 
+    /**
+     * When the available products view adds
+     */
+    handleAddButtonClicked(event){
+        let pricebookEntries = event.detail['pricebookEntryIds'];
+        this.template.querySelector("c-order-products").addPricebookEntries(pricebookEntries);
+    }
 }

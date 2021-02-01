@@ -66,8 +66,15 @@ export default class AvailableProducts extends LightningElement {
     handleOnAddClick(){
         const datatableElement = this.template.querySelector("[data-identifier='AvailableProductsDatatable']");
         let selectedRows = datatableElement.getSelectedRows();
-        consoleLogDeepCopy(selectedRows);
 
-
+        let pricebookEntryIds = selectedRows.map((element) =>{ return element['Id'] });
+        let payload = {
+            detail : {
+                pricebookEntryIds
+            }
+        }
+        this.dispatchEvent(new CustomEvent('addbuttonclicked', payload));
     }
+
+
 }

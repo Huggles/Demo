@@ -7,9 +7,7 @@
 
     <div class="slds-size_1-of-1">
         <article class="slds-card slds-m-left_small slds-p-around_small">
-            <div if:true={isLoading} class="slds-is-relative">
-                <lightning-spinner></lightning-spinner>
-            </div>
+
             <div class="slds-card__header slds-grid">
                 <header class="slds-media slds-media_center slds-has-flexi-truncate">
                     <div class="slds-media__figure">
@@ -25,10 +23,18 @@
             <lightning-datatable
                     data-identifier="OrderedItemsDatatable"
                     key-field="Id"
-                    data={quoteItems}
+                    data={orderItems}
                     columns={orderedItemsColumns}
                     hide-checkbox-column="true">
             </lightning-datatable>
+            <div class="slds-size_1-of-1 slds-m-top_small">
+                <div class="slds-size_1-of-1">
+                    <span class="slds-item_label">Sends request to: https://hvk-demo.requestcatcher.com/</span>
+                </div>
+                <div class="slds-size_1-of-1">
+                    <lightning-button label="Confirm Order" variant="brand" onclick={handleConfirmOrderClicked}></lightning-button>
+                </div>
+            </div>
         </article>
     </div>
 </template>

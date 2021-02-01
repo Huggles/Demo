@@ -14,14 +14,6 @@ public with sharing class PriceBookSelector {
     }
 
     /**
-    * @param priceBookEntryId A list of PriceBookEntry ids
-    * @return Gets price book details
-    */
-    public static PricebookEntry getPriceBookEntryDetails(Id priceBookEntryId){
-        return getPriceBookEntryDetails(new List<Id>{priceBookEntryId})[0];
-    }
-
-    /**
      * @param priceBookEntryIds A list of PriceBookEntry ids
     * @return Gets price book details
     */

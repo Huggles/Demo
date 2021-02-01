@@ -5,8 +5,8 @@
 import {LightningElement, api, wire} from 'lwc';
 
 import getOrderDetails from '@salesforce/apex/OrderViewController.getOrderDetails';
-import insertOrderItem from '@salesforce/apex/OrderViewController.insertOrderItem';
-import updateOrderItem from '@salesforce/apex/OrderViewController.updateOrderItem';
+import addPriceBookEntries from '@salesforce/apex/OrderViewController.addPriceBookEntries';
+import confirmOrder from '@salesforce/apex/OrderViewController.confirmOrder';
 
 import {consoleLogDeepCopy} from "c/lwcHelper";
 
@@ -21,7 +21,7 @@ export default class AvailableProducts extends LightningElement {
      * Stores the quote record and its items
      * @private
      */
-    _quoteRecord;
+    _orderRecord;
 
     /**
      * Whether the component is loading or not.
@@ -53,11 +53,11 @@ export default class AvailableProducts extends LightningElement {
 
 
     /**
-     * Returns the quote items attached to the quote.
+     * Returns the order items attached to the quote.
      * @returns {*|*[]}
      */
-    get quoteItems(){
-        return this._quoteRecord ? this._quoteRecord['OrderItems'] : [];
+    get orderItems(){
+        return this._orderRecord ? this._orderRecord['OrderItems'] : [];
     }
 
 
@@ -69,8 +69,8 @@ export default class AvailableProducts extends LightningElement {
         this.isLoading = true;
         getOrderDetails({orderId : this.recordId})
             .then((result)=>{
-                this._quoteRecord = result;
-                consoleLogDeepCopy(this.quoteItems);
+                this._orderRecord = result;
+                consoleLogDeepCopy(this._orderRecord);
             })
             .catch((error)=>{
                 console.log(error);
@@ -84,17 +84,42 @@ export default class AvailableProducts extends LightningElement {
      * @param productId
      */
     @api
-    async addProduct(pricebookEntry) {
-        this.isLoading = true;
-        await insertOrderItem({orderId : this.recordId})
-            .then((result)=>{
-                this.retrieveOrderDetails();
-            })
-            .catch((error)=>{
+    addPricebookEntries(pricebookEntryIds) {
+        if(this.isLoading === false){
+            this.isLoading = true;
+            addPriceBookEntries({ orderId : this.recordId, priceBookEntryIds : pricebookEntryIds })
+                .then((result)=>{
+                    this._orderRecord = result;
+                })
+                .catch((error)=>{
+                    console.log(error);
+                })
+                .finally(()=>{
+                    this.isLoading = false;
+                })
+        }
+    }
 
-            })
-            .finally(()=>{
-                this.isLoading = false;
-            })
+
+
+    /**
+     * When the confirm order button has been clicked.
+     */
+    handleConfirmOrderClicked(event){
+        if(this.isLoading === false){
+            this.isLoading = true;
+            confirmOrder({ orderId : this.recordId })
+                .then((result)=>{
+                    consoleLogDeepCopy(result);
+
+                })
+                .catch((error)=>{
+                    console.log(error);
+                })
+                .finally(()=>{
+                    this.isLoading = false;
+                })
+        }
+
     }
 }

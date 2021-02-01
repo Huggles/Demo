@@ -9,7 +9,7 @@ const consoleLogDeepCopy = (obj)=>{
     console.log(deepCloneObject(obj));
 }
 const deepCloneObject = (obj)=>{
-    console.log(JSON.parse(JSON.stringify(obj)));
+    return JSON.parse(JSON.stringify(obj));
 }
 
 

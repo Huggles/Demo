@@ -15,7 +15,20 @@ public with sharing class OrderSelector {
         List<Order> orders = [
                 SELECT  Id,
                         Name,
-                (SELECT Id, OrderId, Product2.Name, UnitPrice, Quantity, TotalPrice FROM OrderItems)
+                        OrderNumber,
+                        Account.AccountNumber,
+                        Type,
+                        Status,
+                    (SELECT Id,
+                            OrderId,
+                            OrderItemNumber,
+                            PricebookEntryId,
+                            Product2.Name,
+                            Product2.ProductCode,
+                            UnitPrice,
+                            Quantity,
+                            TotalPrice
+                    FROM OrderItems)
                 FROM Order
                 WHERE Id IN :orderIds];
         return orders;
