@@ -48,28 +48,22 @@ public with sharing class OrderService {
     * @param orderId The Order id to confirm
      * @return Boolean whether or not the callout was successful.
     */
-    public static Boolean confirmOrder(Id orderId){
-        List<Order> orders = OrderSelector.getOrders(new List<Id>{orderId});
-        OrderConfirmationDTO orderConfirmationDTO = new OrderConfirmationDTO(orders[0]);
+    public static OrderDTO confirmOrder(Id orderId){
+        Order order = OrderSelector.getOrders(new List<Id>{orderId})[0];
+        OrderConfirmationDTO orderConfirmationDTO = new OrderConfirmationDTO(order);
 
         String endpoint = 'https://hvk-demo.requestcatcher.com/';
-
-        // Instantiate a new http object
-        Http h = new Http();
-
-        // Instantiate a new HTTP request, specify the method (GET) as well as the endpoint
-        HttpRequest req = new HttpRequest();
-        req.setEndpoint(endpoint);
-        req.setMethod('POST');
-        req.setBody(JSON.serialize(orderConfirmationDTO));
-
-        // Send the request, and return a response
-        HttpResponse res = h.send(req);
-
-        if(res.getStatusCode() == 200){
-            return true;
-        }else{
-            return false;
+        String method = 'POST';
+        String body = JSON.serialize(orderConfirmationDTO);
+        try {
+            String response = CalloutService.sendPayload(endpoint, method, body);
+            if(response != null){
+                order.Status = 'Activated';
+                update order;
+            }
+        }catch (CustomException ce){
+            throw new CustomException('Could not confirm the order. Please try again');
         }
+        return new OrderDTO(order);
     }
 }

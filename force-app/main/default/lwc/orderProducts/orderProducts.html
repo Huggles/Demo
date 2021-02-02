@@ -20,20 +20,32 @@
                     </div>
                 </header>
             </div>
-            <lightning-datatable
-                    data-identifier="OrderedItemsDatatable"
-                    key-field="Id"
-                    data={orderItems}
-                    columns={orderedItemsColumns}
-                    hide-checkbox-column="true">
-            </lightning-datatable>
+            <div class="available_products_table">
+
+                <lightning-datatable
+                        data-identifier="OrderedItemsDatatable"
+                        key-field="Id"
+                        data={orderItems}
+                        columns={orderedItemsColumns}
+                        hide-checkbox-column="true">
+                </lightning-datatable>
+
+            </div>
             <div class="slds-size_1-of-1 slds-m-top_small">
+                <div if:true={isLoading} class="slds-is-relative">
+                    <lightning-spinner></lightning-spinner>
+                </div>
                 <div class="slds-size_1-of-1">
                     <span class="slds-item_label">Sends request to: https://hvk-demo.requestcatcher.com/</span>
                 </div>
                 <div class="slds-size_1-of-1">
-                    <lightning-button label="Confirm Order" variant="brand" onclick={handleConfirmOrderClicked}></lightning-button>
+                    <lightning-button label="Confirm Order" variant="brand" onclick={handleConfirmOrderClicked} disabled={isOrderActivated}></lightning-button>
                 </div>
+                <template if:true={isOrderActivated}>
+                    <div class="slds-m-top_small">
+                        <c-message-box type="warning" message="The order is activated and cannot be changed anymore."></c-message-box>
+                    </div>
+                </template>
             </div>
         </article>
     </div>

@@ -3,9 +3,7 @@
  */
 
 import {LightningElement, api, wire} from 'lwc';
-
 import getAvailableProducts from '@salesforce/apex/OrderViewController.getAvailableProducts';
-import {consoleLogDeepCopy} from "c/lwcHelper";
 
 export default class AvailableProducts extends LightningElement {
 
@@ -13,6 +11,14 @@ export default class AvailableProducts extends LightningElement {
      * The order record id
      */
     @api recordId;
+
+
+    /**
+     * Whether or not this component is disabled for user interaction.
+     * @type {*}
+     */
+    @api isDisabled = false;
+
 
     /**
      * Stores the available product data.
@@ -35,6 +41,7 @@ export default class AvailableProducts extends LightningElement {
             console.log(error);
         }
     }
+
 
     /**
      * Gets the available product column names

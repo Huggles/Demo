@@ -124,8 +124,6 @@ public with sharing class OrderViewControllerTest {
         Map<Id,PricebookEntry> pricebookEntriesMap  = new Map<Id,PricebookEntry>([SELECT Id, Name FROM PricebookEntry]);
         List<Id> pricebookEntryKeys = new List<Id>(pricebookEntriesMap.keySet());
 
-        System.debug(pricebookEntryKeys);
-
         Test.startTest();
         OrderDTO orderDTO = OrderViewController.addPriceBookEntries(orderId, pricebookEntryKeys);
         Test.stopTest();
@@ -137,6 +135,31 @@ public with sharing class OrderViewControllerTest {
         Test.startTest();
         try {
             OrderDTO orderDTO = OrderViewController.addPriceBookEntries(null, null);
+            System.assert(false);
+        }
+        catch (Exception e){
+            System.assert(true);
+        }
+        Test.stopTest();
+    }
+
+    @IsTest
+    public static void testConfirmOrder(){
+        Test.setMock(HttpCalloutMock.class, new RequestCatcherMock());
+        Id orderId = [SELECT Id FROM Order].Id;
+        Test.startTest();
+        OrderDTO orderDTO = OrderViewController.confirmOrder(orderId);
+        Test.stopTest();
+        System.assertEquals('Activated',orderDTO.Status);
+    }
+
+    @IsTest
+    public static void testConfirmOrderError(){
+        Test.setMock(HttpCalloutMock.class, new RequestCatcherMockError());
+        Id orderId = [SELECT Id FROM Order].Id;
+        Test.startTest();
+        try {
+            OrderDTO orderDTO = OrderViewController.confirmOrder(orderId);
             System.assert(false);
         }
         catch (Exception e){

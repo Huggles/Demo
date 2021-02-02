@@ -71,10 +71,10 @@ public with sharing class OrderViewController {
      * @return Order record.
      */
     @AuraEnabled
-    public static void confirmOrder(Id orderId){
+    public static OrderDTO confirmOrder(Id orderId){
         try {
-            Boolean success = OrderService.confirmOrder(orderId);
-            System.debug(success);
+            OrderDTO orderDTO = OrderService.confirmOrder(orderId);
+            return orderDTO;
         }
         catch(Exception e){
             //Log error;

@@ -10,8 +10,7 @@
             <c-available-products record-id={recordId} onaddbuttonclicked={handleAddButtonClicked}></c-available-products>
         </div>
         <div class="slds-col slds-size_2-of-3">
-            <c-order-products record-id={recordId}></c-order-products>
+            <c-order-products record-id={recordId} onorderconfirmed={handleOrderActivated}></c-order-products>
         </div>
     </div>
-
 </template>

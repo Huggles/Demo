@@ -8,8 +8,6 @@ import getOrderDetails from '@salesforce/apex/OrderViewController.getOrderDetail
 import addPriceBookEntries from '@salesforce/apex/OrderViewController.addPriceBookEntries';
 import confirmOrder from '@salesforce/apex/OrderViewController.confirmOrder';
 
-import {consoleLogDeepCopy} from "c/lwcHelper";
-
 export default class AvailableProducts extends LightningElement {
 
     /**
@@ -60,7 +58,17 @@ export default class AvailableProducts extends LightningElement {
         return this._orderRecord ? this._orderRecord['OrderItems'] : [];
     }
 
-
+    /**
+     * Whether the Order is activated or not.
+     * @returns {boolean}
+     */
+    get isOrderActivated(){
+        if(this._orderRecord && this._orderRecord['Status'] === 'Activated'){
+            this.dispatchOrderActivatedEvent()
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Retrieves the available products.
@@ -70,7 +78,7 @@ export default class AvailableProducts extends LightningElement {
         getOrderDetails({orderId : this.recordId})
             .then((result)=>{
                 this._orderRecord = result;
-                consoleLogDeepCopy(this._orderRecord);
+                console.log(this._orderRecord);
             })
             .catch((error)=>{
                 console.log(error);
@@ -110,8 +118,8 @@ export default class AvailableProducts extends LightningElement {
             this.isLoading = true;
             confirmOrder({ orderId : this.recordId })
                 .then((result)=>{
-                    consoleLogDeepCopy(result);
-
+                    this._orderRecord = result;
+                    this.dispatchOrderActivatedEvent();
                 })
                 .catch((error)=>{
                     console.log(error);
@@ -120,6 +128,13 @@ export default class AvailableProducts extends LightningElement {
                     this.isLoading = false;
                 })
         }
-
+    }
+    dispatchOrderActivatedEvent(){
+        let payload = {
+            detail : {
+                orderRecord : this._orderRecord
+            }
+        }
+        this.dispatchEvent(new CustomEvent('orderconfirmed', payload));
     }
 }

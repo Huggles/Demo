@@ -19,4 +19,13 @@ export default class OrderView extends LightningElement {
         let pricebookEntries = event.detail['pricebookEntryIds'];
         this.template.querySelector("c-order-products").addPricebookEntries(pricebookEntries);
     }
+
+    /**
+     * When the order is confirmed, make sure the available products lwc is aware.
+     * @param event
+     */
+    handleOrderActivated(event){
+        let availableProductsElement = this.template.querySelector("c-available-products");
+        availableProductsElement.isDisabled = true;
+    }
 }

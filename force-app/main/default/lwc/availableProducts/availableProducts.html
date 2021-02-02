@@ -20,16 +20,23 @@
                         </h2>
                     </div>
                     <div class="slds-no-flex">
-                        <button class="slds-button slds-button_neutral" onclick={handleOnAddClick} disabled={isLoading}>Add+</button>
+                        <button class="slds-button slds-button_neutral" onclick={handleOnAddClick} disabled={isDisabled}>Add+</button>
                     </div>
                 </header>
             </div>
-            <lightning-datatable
-                    data-identifier="AvailableProductsDatatable"
-                    key-field="Id"
-                    data={availableProductData}
-                    columns={availableProductColumns}>
-            </lightning-datatable>
+            <div class="available_products_table">
+                <lightning-datatable
+                        data-identifier="AvailableProductsDatatable"
+                        key-field="Id"
+                        data={availableProductData}
+                        columns={availableProductColumns}>
+                </lightning-datatable>
+            </div>
+            <template if:true={isDisabled}>
+                <div class="slds-m-top_small">
+                    <c-message-box type="warning" message="The order is activated and cannot be changed anymore."></c-message-box>
+                </div>
+            </template>
         </article>
     </div>
 </template>
